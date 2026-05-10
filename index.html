@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -368,7 +369,7 @@
       <div class="value green" id="stat-income">—</div>
     </div>
     <div class="stat-card">
-      <div class="label">Saldo netto</div>
+      <div class="label">Saldo a fine periodo</div>
       <div class="value green" id="stat-balance">—</div>
     </div>
     <div class="stat-card">
@@ -757,7 +758,12 @@ function renderCharts() {
   const incomeItems   = filtered.filter(e =>  isIncome(e));
   const totalExpenses = expenseItems.reduce((s,e) => s + e.amount, 0);
   const totalIncome   = incomeItems.reduce((s,e)  => s + e.amount, 0);
-  const balance       = totalIncome - totalExpenses;
+
+  // Saldo cumulativo fino a fine periodo (o oggi, se periodo è futuro)
+  const { sun: periodSun } = getChartBounds();
+  const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
+  const cumulativeEnd = periodSun < todayEnd ? periodSun : todayEnd;
+  const balance = cumulativeSaldoUpTo(cumulativeEnd);
 
   let periodLabel;
   if (chartPeriod === 'week') {
@@ -891,29 +897,43 @@ function getHeaderScope() {
   return { type: 'month', date: new Date(), label: monthLabel(new Date()) + ' (corrente)' };
 }
 
+// Saldo cumulativo: somma di tutto (entrate − spese) fino a una certa data
+function cumulativeSaldoUpTo(endDate) {
+  let total = 0;
+  expenses.forEach(e => {
+    const d = new Date(e.date + 'T00:00:00');
+    if (d <= endDate) total += isIncome(e) ? e.amount : -e.amount;
+  });
+  return total;
+}
+
 function updateHeaderTotal() {
   const scope = getHeaderScope();
-  let exp = 0, inc = 0;
 
+  // Spese del periodo selezionato (utile "quanto ho speso questo mese")
+  let exp = 0;
   if (scope.type === 'week') {
     expenses.forEach(e => {
       const d = new Date(e.date + 'T00:00:00');
-      if (d >= scope.mon && d <= scope.sun) {
-        if (isIncome(e)) inc += e.amount; else exp += e.amount;
-      }
+      if (d >= scope.mon && d <= scope.sun && !isIncome(e)) exp += e.amount;
     });
   } else {
     const ym = fmtYM(scope.date);
     expenses.forEach(e => {
-      if (e.date.startsWith(ym)) {
-        if (isIncome(e)) inc += e.amount; else exp += e.amount;
-      }
+      if (e.date.startsWith(ym) && !isIncome(e)) exp += e.amount;
     });
   }
 
-  const bal = inc - exp;
+  // Saldo cumulativo fino a fine periodo (o fino a oggi se il periodo è futuro)
+  const today = new Date(); today.setHours(23,59,59,999);
+  const periodEnd = scope.type === 'week'
+    ? scope.sun
+    : new Date(scope.date.getFullYear(), scope.date.getMonth()+1, 0, 23,59,59,999);
+  const endDate = periodEnd < today ? periodEnd : today;
+  const saldo = cumulativeSaldoUpTo(endDate);
+
   document.getElementById('header-total').innerHTML =
-    `<span class="period-tag">${scope.label}</span> · Spese €${exp.toFixed(2)} · Saldo ${bal >= 0 ? '+' : ''}€${bal.toFixed(2)}`;
+    `<span class="period-tag">${scope.label}</span> · Spese €${exp.toFixed(2)} · Saldo ${saldo >= 0 ? '+' : ''}€${saldo.toFixed(2)}`;
 }
 
 function monthLabel(d) {
