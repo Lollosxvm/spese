@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -31,7 +30,6 @@
       min-height: 100dvh;
     }
 
-    /* ─── HEADER ─────────────────────────────── */
     .header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -45,11 +43,8 @@
       color: var(--muted); font-size: 12px; margin-top: 1px;
       overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
     }
-    .header .subtitle .period-tag {
-      color: var(--accent); font-weight: 600; text-transform: capitalize;
-    }
+    .header .subtitle .period-tag { color: var(--accent); font-weight: 600; text-transform: capitalize; }
 
-    /* ─── BOTTOM NAV ─────────────────────────── */
     nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -77,7 +72,6 @@
     nav button .ni { font-size: 22px; line-height: 1; }
     nav button.active { color: var(--accent); }
 
-    /* ─── PAGES ──────────────────────────────── */
     .page {
       display: none;
       padding: calc(var(--hdr-h) + 10px) 14px calc(var(--nav-h) + 10px);
@@ -86,16 +80,17 @@
     }
     .page.active { display: block; }
 
-    /* ─── CARDS ──────────────────────────────── */
-    .card {
+    .card, .chart-wrap {
       background: var(--surface);
       border-radius: var(--radius);
       padding: 14px 16px;
       margin-bottom: 10px;
     }
-    .card h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+    .card h2, .chart-wrap h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+    .chart-wrap h2 { margin-bottom: 4px; }
+    .chart-wrap .period-info { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    canvas { max-height: 230px; }
 
-    /* ─── FORM ───────────────────────────────── */
     .form-group { margin-bottom: 11px; }
     .form-group label { font-size: 12px; color: var(--muted); margin-bottom: 5px; display: block; }
     .form-group input, .form-group select {
@@ -153,8 +148,27 @@
     }
     .btn-primary:active { opacity: 0.8; }
     .btn-primary.income-mode { background: var(--income); color: #0f0f13; }
+    .btn-secondary {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid #ffffff15;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px; font-weight: 600;
+      padding: 12px; cursor: pointer; margin-top: 8px;
+    }
+    .btn-mini {
+      background: var(--surface2);
+      border: 1.5px solid #ffffff15;
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 10px;
+      cursor: pointer;
+      margin: 8px 0 4px;
+    }
 
-    /* ─── TX LIST ────────────────────────────── */
     .tx-item {
       display: flex;
       align-items: center;
@@ -179,17 +193,6 @@
     .tx-del  { background: none; border: none; color: #ffffff25; font-size: 15px; cursor: pointer; padding: 4px 5px; transition: color .2s; }
     .tx-del:active { color: var(--accent2); }
 
-    /* ─── CHARTS ─────────────────────────────── */
-    .chart-wrap {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      margin-bottom: 10px;
-    }
-    .chart-wrap h2 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .chart-wrap .period-info { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-    canvas { max-height: 230px; }
-
     .period-selector { display: flex; gap: 7px; margin-bottom: 10px; }
     .period-selector button {
       flex: 1;
@@ -211,7 +214,7 @@
     .stat-card .value.green  { color: var(--income); }
 
     .legend { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
-    .legend-item { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+    .legend-item { display: flex; align-items: center; gap: 9px; font-size: 13px; cursor: pointer; }
     .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
     .legend-label { flex: 1; }
     .legend-amount { font-weight: 600; }
@@ -219,30 +222,6 @@
     .empty { text-align: center; padding: 32px 20px; color: var(--muted); }
     .empty .big { font-size: 44px; margin-bottom: 10px; }
     .empty p { font-size: 14px; }
-
-    .toast {
-      position: fixed;
-      bottom: calc(var(--nav-h) + 10px);
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--accent); color: #fff;
-      padding: 9px 18px; border-radius: 20px;
-      font-size: 13px; font-weight: 600;
-      opacity: 0; transition: all .3s;
-      pointer-events: none; z-index: 999;
-      white-space: nowrap;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    .btn-secondary {
-      width: 100%;
-      background: var(--surface2);
-      border: 1.5px solid #ffffff15;
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 14px; font-weight: 600;
-      padding: 12px; cursor: pointer; margin-top: 8px;
-    }
     .section-title {
       font-size: 11px; font-weight: 600; color: var(--muted);
       text-transform: uppercase; letter-spacing: .7px;
@@ -257,8 +236,13 @@
       width: 34px; height: 34px; border-radius: 10px; font-size: 18px; cursor: pointer;
     }
     .month-nav .month-label { font-size: 14px; font-weight: 600; }
+    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .filter-row select {
+      width: 100%; background: var(--surface2); border: 1.5px solid #ffffff15;
+      color: var(--text); border-radius: 10px; padding: 10px 11px; font-size: 13px;
+      appearance: none; -webkit-appearance: none;
+    }
 
-    /* ─── EDIT MODAL (bottom sheet) ──────────── */
     .modal-overlay {
       display: none;
       position: fixed; inset: 0;
@@ -274,11 +258,12 @@
       padding: 18px 14px calc(env(safe-area-inset-bottom, 0px) + 16px);
       width: 100%;
       max-width: 480px;
+      max-height: 88dvh;
+      overflow-y: auto;
     }
     .modal-sheet h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; text-align: center; }
     .modal-actions { display: flex; gap: 8px; margin-top: 12px; }
-    .modal-actions .btn-primary,
-    .modal-actions .btn-cancel { flex: 1; }
+    .modal-actions .btn-primary, .modal-actions .btn-cancel { flex: 1; }
     .btn-cancel {
       background: var(--surface2);
       border: 1.5px solid #ffffff15;
@@ -286,6 +271,19 @@
       font-size: 15px; font-weight: 600;
       padding: 13px; cursor: pointer;
     }
+    .toast {
+      position: fixed;
+      bottom: calc(var(--nav-h) + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--accent); color: #fff;
+      padding: 9px 18px; border-radius: 20px;
+      font-size: 13px; font-weight: 600;
+      opacity: 0; transition: all .3s;
+      pointer-events: none; z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -296,21 +294,12 @@
 </div>
 
 <nav>
-  <button class="active" onclick="showPage('add',this)">
-    <span class="ni">➕</span>Aggiungi
-  </button>
-  <button onclick="showPage('history',this)">
-    <span class="ni">📋</span>Storico
-  </button>
-  <button onclick="showPage('charts',this)">
-    <span class="ni">📊</span>Grafici
-  </button>
-  <button onclick="showPage('settings',this)">
-    <span class="ni">⚙️</span>Impost.
-  </button>
+  <button class="active" onclick="showPage('add',this)"><span class="ni">➕</span>Aggiungi</button>
+  <button onclick="showPage('history',this)"><span class="ni">📋</span>Storico</button>
+  <button onclick="showPage('charts',this)"><span class="ni">📊</span>Grafici</button>
+  <button onclick="showPage('settings',this)"><span class="ni">⚙️</span>Impost.</button>
 </nav>
 
-<!-- PAGE: AGGIUNGI -->
 <div class="page active" id="page-add">
   <div class="card">
     <h2>Nuova voce</h2>
@@ -321,6 +310,10 @@
     <div class="form-group">
       <label>Categoria</label>
       <div class="cat-grid" id="cat-grid"></div>
+    </div>
+    <div class="form-group" id="subcategory-group" style="display:none">
+      <label>Sottocategoria</label>
+      <select id="inp-subcategory"></select>
     </div>
     <div class="form-group">
       <label>Nota (opzionale)</label>
@@ -334,7 +327,6 @@
   </div>
 </div>
 
-<!-- PAGE: STORICO -->
 <div class="page" id="page-history">
   <div class="period-selector">
     <button class="active" onclick="setHistoryPeriod('month',this)">Mese</button>
@@ -345,10 +337,13 @@
     <span class="month-label" id="history-month-label"></span>
     <button onclick="changeHistoryPeriod(+1)">›</button>
   </div>
+  <div class="filter-row">
+    <select id="history-cat-filter" onchange="onHistoryCatFilterChange()"></select>
+    <select id="history-subcat-filter" onchange="renderHistory(); updateHeaderTotal();"></select>
+  </div>
   <div id="history-list"></div>
 </div>
 
-<!-- PAGE: GRAFICI -->
 <div class="page" id="page-charts">
   <div class="period-selector">
     <button class="active" onclick="setChartPeriod('month',this)">Mese</button>
@@ -360,26 +355,15 @@
     <button onclick="changeChartPeriod(+1)">›</button>
   </div>
   <div class="stats-row">
-    <div class="stat-card">
-      <div class="label">Spese periodo</div>
-      <div class="value red" id="stat-total">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Entrate periodo</div>
-      <div class="value green" id="stat-income">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Saldo a fine periodo</div>
-      <div class="value green" id="stat-balance">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Media/giorno spese</div>
-      <div class="value purple" id="stat-avg">—</div>
-    </div>
+    <div class="stat-card"><div class="label">Spese periodo</div><div class="value red" id="stat-total">—</div></div>
+    <div class="stat-card"><div class="label">Entrate periodo</div><div class="value green" id="stat-income">—</div></div>
+    <div class="stat-card"><div class="label">Saldo a fine periodo</div><div class="value green" id="stat-balance">—</div></div>
+    <div class="stat-card"><div class="label">Media/giorno spese</div><div class="value purple" id="stat-avg">—</div></div>
   </div>
   <div class="chart-wrap">
-    <h2>Spese per categoria</h2>
+    <h2 id="doughnut-title">Spese per categoria</h2>
     <div class="period-info" id="chart-period-label"></div>
+    <button class="btn-mini" id="btn-chart-back" onclick="resetChartDrilldown()" style="display:none">← Torna alle macro-categorie</button>
     <canvas id="chartDoughnut"></canvas>
     <div class="legend" id="chart-legend"></div>
   </div>
@@ -389,7 +373,6 @@
   </div>
 </div>
 
-<!-- PAGE: IMPOSTAZIONI -->
 <div class="page" id="page-settings">
   <div class="card">
     <h2>Dati</h2>
@@ -397,6 +380,10 @@
     <button class="btn-secondary" onclick="exportJSON()">💾 Backup JSON</button>
     <button class="btn-secondary" onclick="importData()">📥 Importa JSON</button>
     <input type="file" id="file-import" accept=".json" style="display:none" onchange="handleImport(event)" />
+  </div>
+  <div class="card">
+    <h2>Manutenzione</h2>
+    <button class="btn-secondary" onclick="assignAltroToMissingSubcategories()">🧩 Metti “Altro” dove manca sottocategoria</button>
   </div>
   <div class="card">
     <h2>⚠️ Pericoloso</h2>
@@ -407,19 +394,37 @@
     <p style="font-size:13px;color:var(--muted);line-height:1.9">
       1. Apri questa pagina in <strong style="color:var(--text)">Safari</strong><br>
       2. Tocca il tasto <strong style="color:var(--text)">Condividi</strong> (□↑)<br>
-      3. Scegli <strong style="color:var(--text)">"Aggiungi a schermata Home"</strong>
+      3. Scegli <strong style="color:var(--text)">Aggiungi a schermata Home</strong>
     </p>
   </div>
 </div>
 
-<!-- EDIT CATEGORY BOTTOM SHEET -->
 <div class="modal-overlay" id="edit-modal" onclick="closeEditModal(event)">
   <div class="modal-sheet">
-    <h3>Cambia categoria</h3>
-    <div class="cat-grid" id="edit-cat-grid"></div>
+    <h3>Modifica voce</h3>
+    <div class="form-group">
+      <label>Importo (€)</label>
+      <input type="number" id="edit-amount" inputmode="decimal" step="0.01" min="0" />
+    </div>
+    <div class="form-group">
+      <label>Categoria</label>
+      <div class="cat-grid" id="edit-cat-grid"></div>
+    </div>
+    <div class="form-group" id="edit-subcategory-group" style="display:none">
+      <label>Sottocategoria</label>
+      <select id="edit-subcategory"></select>
+    </div>
+    <div class="form-group">
+      <label>Nota</label>
+      <input type="text" id="edit-note" />
+    </div>
+    <div class="form-group">
+      <label>Data</label>
+      <input type="date" id="edit-date" />
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeEditModal()">Annulla</button>
-      <button class="btn-primary" onclick="confirmEditCat()">Conferma</button>
+      <button class="btn-primary" onclick="confirmEditEntry()">Salva</button>
     </div>
   </div>
 </div>
@@ -428,43 +433,90 @@
 
 <script>
 const CATEGORIES = [
-  { id: 'utenze',    label: 'Utenze',    icon: '💡', color: '#f7c66e' },
-  { id: 'sigarette', label: 'Sigarette', icon: '🚬', color: '#f76e6e' },
-  { id: 'spesa',     label: 'Spesa',     icon: '🛒', color: '#6ef7a0' },
-  { id: 'trasporti', label: 'Trasporti', icon: '🚌', color: '#6ec8f7' },
-  { id: 'banca',     label: 'Banca',     icon: '🏦', color: '#7c6ef7' },
-  { id: 'acquisti',  label: 'Acquisti',  icon: '🛍️', color: '#f76ec8' },
-  { id: 'uni-lore',  label: 'Uni Lore',  icon: '🎓', color: '#f7a06e' },
-  { id: 'uni-rosi',  label: 'Uni Rosi',  icon: '📚', color: '#a06ef7' },
-  { id: 'stipendio', label: 'Stipendio', icon: '💰', color: '#6ef7a0', income: true },
+  { id: 'utenze', label: 'Utenze', icon: '💡', color: '#f7c66e', subcategories: [
+    { id: 'wifi', label: 'Wifi' }, { id: 'condominio', label: 'Condominio' },
+    { id: 'gas', label: 'Gas' }, { id: 'luce', label: 'Luce' },
+    { id: 'tari', label: 'TARI' }, { id: 'acqua', label: 'Acqua' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'sigarette', label: 'Sigarette', icon: '🚬', color: '#f76e6e', subcategories: [
+    { id: 'liquidi', label: 'Liquidi' }, { id: 'resistenze', label: 'Resistenze' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'spesa', label: 'Spesa', icon: '🛒', color: '#6ef7a0', subcategories: [
+    { id: 'coop', label: 'Coop' }, { id: 'conad', label: 'Conad' }, { id: 'md', label: 'MD' },
+    { id: 'amazon', label: 'Amazon' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'trasporti', label: 'Trasporti', icon: '🚌', color: '#6ec8f7', subcategories: [
+    { id: 'treno', label: 'Treno' }, { id: 'benzina', label: 'Benzina' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'banca', label: 'Banca', icon: '🏦', color: '#7c6ef7', subcategories: [
+    { id: 'mutuo', label: 'Mutuo' }, { id: 'prestito-15k', label: 'Prestito 15k' },
+    { id: 'assicurazione-vita', label: 'Assicurazione vita' }, { id: 'rata-panda', label: 'Rata Panda' },
+    { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'acquisti', label: 'Acquisti', icon: '🛍️', color: '#f76ec8', subcategories: [
+    { id: 'abbigliamento', label: 'Abbigliamento' }, { id: 'casa', label: 'Casa' }, { id: 'spesa', label: 'Spesa' }, { id: 'bar', label: 'Bar' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'uni-lore', label: 'Uni Lore', icon: '🎓', color: '#f7a06e', subcategories: [
+    { id: 'retta', label: 'Retta' }, { id: 'discolazio', label: 'DiscoLazio' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'uni-rosi', label: 'Uni Rosi', icon: '📚', color: '#a06ef7', subcategories: [
+    { id: 'retta', label: 'Retta' }, { id: 'sblocco-sede', label: 'Sblocco sede' },
+    { id: 'discolazio', label: 'DiscoLazio' }, { id: 'altro', label: 'Altro' }
+  ]},
+  { id: 'entrate', label: 'Entrate', icon: '💰', color: '#6ef7a0', income: true, subcategories: [
+    { id: 'stipendio', label: 'Stipendio' }, { id: 'rimborso', label: 'Rimborso' },
+    { id: 'regalo', label: 'Regalo' }, { id: 'bonus', label: 'Bonus' }, { id: 'altro', label: 'Altro' }
+  ]},
+  // Compatibilità con vecchi dati salvati come category: 'stipendio'
+  { id: 'stipendio', label: 'Stipendio', icon: '💰', color: '#6ef7a0', income: true, hidden: true, subcategories: [
+    { id: 'stipendio', label: 'Stipendio' }, { id: 'altro', label: 'Altro' }
+  ]}
 ];
 
-let expenses      = JSON.parse(localStorage.getItem('spese_v1') || '[]');
-let selectedCat   = null;
-
-let chartPeriod   = 'month';
-let chartMonth    = new Date();        // primo del mese visualizzato (Grafici)
-let chartWeek     = mondayOf(new Date()); // lunedì della settimana visualizzata (Grafici)
-
+let expenses = migrateExpenses(JSON.parse(localStorage.getItem('spese_v1') || '[]'));
+let selectedCat = null;
+let chartPeriod = 'month';
+let chartMonth = new Date();
+let chartWeek = mondayOf(new Date());
 let historyPeriod = 'month';
-let historyMonth  = new Date();        // primo del mese visualizzato (Storico)
-let historyWeek   = mondayOf(new Date()); // lunedì della settimana visualizzata (Storico)
-
-let currentPage   = 'add';
-
+let historyMonth = new Date();
+let historyWeek = mondayOf(new Date());
+let currentPage = 'add';
 let doughnutChart = null;
-let lineChart     = null;
+let lineChart = null;
 let editExpenseId = null;
 let editSelectedCat = null;
+let selectedChartCategory = null;
 
-// backward-compat: derive income flag from category if missing
-function isIncome(e) {
-  return !!(e.income || CATEGORIES.find(c => c.id === e.category)?.income);
+function migrateExpenses(items) {
+  if (!Array.isArray(items)) return [];
+  let changed = false;
+  const migrated = items.map(e => {
+    const copy = { ...e };
+    if (!copy.id) { copy.id = Date.now() + Math.floor(Math.random()*100000); changed = true; }
+    if (copy.category === 'stipendio') { copy.category = 'entrate'; copy.subcategory = copy.subcategory || 'stipendio'; copy.income = true; changed = true; }
+    if (copy.subcategory === undefined) { copy.subcategory = ''; changed = true; }
+    if (copy.income === undefined) { copy.income = !!(CATEGORIES.find(c => c.id === copy.category)?.income); changed = true; }
+    return copy;
+  });
+  if (changed) localStorage.setItem('spese_v1', JSON.stringify(migrated));
+  return migrated;
+}
+
+function save() { localStorage.setItem('spese_v1', JSON.stringify(expenses)); }
+function isIncome(e) { return !!(e.income || CATEGORIES.find(c => c.id === e.category)?.income); }
+function visibleCategories() { return CATEGORIES.filter(c => !c.hidden); }
+function expenseCategories() { return visibleCategories().filter(c => !c.income); }
+function getCat(id) { return CATEGORIES.find(c => c.id === id) || { id, label: id || 'Senza categoria', icon: '❓', color: '#888', subcategories: [] }; }
+function getSubcat(catId, subId) {
+  const cat = getCat(catId);
+  return cat.subcategories?.find(s => s.id === subId) || (subId ? { id: subId, label: subId } : { id: '', label: 'Da categorizzare' });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   buildCatGrid('cat-grid', selectCat);
   buildCatGrid('edit-cat-grid', selectEditCat);
+  buildHistoryFilters();
   setDefaultDate();
   syncHistoryLabel();
   syncChartLabel();
@@ -473,24 +525,21 @@ document.addEventListener('DOMContentLoaded', () => {
   updateHeaderTotal();
 });
 
-function save() { localStorage.setItem('spese_v1', JSON.stringify(expenses)); }
-
-// ─── NAV ─────────────────────────────────────────────────────────────────────
 function showPage(id, btn) {
   currentPage = id;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   if (btn) btn.classList.add('active');
-  if (id === 'history') renderHistory();
-  if (id === 'charts')  renderCharts();
+  if (id === 'history') { buildHistoryFilters(); renderHistory(); }
+  if (id === 'charts') renderCharts();
   updateHeaderTotal();
 }
 
-// ─── CATEGORIE ───────────────────────────────────────────────────────────────
 function buildCatGrid(gridId, handler) {
   const grid = document.getElementById(gridId);
-  CATEGORIES.forEach(c => {
+  grid.innerHTML = '';
+  visibleCategories().forEach(c => {
     const btn = document.createElement('button');
     btn.className = 'cat-btn' + (c.income ? ' income-cat' : '');
     btn.dataset.id = c.id;
@@ -504,7 +553,8 @@ function selectCat(id, btn, gridId) {
   selectedCat = id;
   document.querySelectorAll(`#${gridId} .cat-btn`).forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
-  const cat = CATEGORIES.find(c => c.id === id);
+  renderSubcategorySelect('inp-subcategory', 'subcategory-group', id, '');
+  const cat = getCat(id);
   const saveBtn = document.getElementById('btn-save');
   const lbl = document.getElementById('amount-label');
   if (cat.income) {
@@ -522,34 +572,48 @@ function selectEditCat(id, btn, gridId) {
   editSelectedCat = id;
   document.querySelectorAll(`#${gridId} .cat-btn`).forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
+  renderSubcategorySelect('edit-subcategory', 'edit-subcategory-group', id, '');
 }
 
-// ─── ADD ─────────────────────────────────────────────────────────────────────
-function setDefaultDate() {
-  document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
+function renderSubcategorySelect(selectId, groupId, categoryId, selectedValue) {
+  const group = document.getElementById(groupId);
+  const select = document.getElementById(selectId);
+  const cat = getCat(categoryId);
+  const subs = cat.subcategories || [];
+  select.innerHTML = '';
+  if (!subs.length) { group.style.display = 'none'; return; }
+  group.style.display = 'block';
+  select.innerHTML = `<option value="">Seleziona sottocategoria</option>` + subs.map(s =>
+    `<option value="${s.id}" ${s.id === selectedValue ? 'selected' : ''}>${s.label}</option>`
+  ).join('');
 }
+
+function setDefaultDate() { document.getElementById('inp-date').value = new Date().toISOString().split('T')[0]; }
 
 function addExpense() {
   const amount = parseFloat(document.getElementById('inp-amount').value);
-  const note   = document.getElementById('inp-note').value.trim();
-  const date   = document.getElementById('inp-date').value;
-
+  const note = document.getElementById('inp-note').value.trim();
+  const date = document.getElementById('inp-date').value;
+  const subcategory = document.getElementById('inp-subcategory').value;
   if (!amount || amount <= 0) { showToast('Inserisci un importo valido'); return; }
-  if (!selectedCat)           { showToast('Seleziona una categoria');      return; }
-  if (!date)                  { showToast('Seleziona una data');           return; }
-
-  const cat = CATEGORIES.find(c => c.id === selectedCat);
+  if (!selectedCat) { showToast('Seleziona una categoria'); return; }
+  if (!subcategory) { showToast('Seleziona una sottocategoria'); return; }
+  if (!date) { showToast('Seleziona una data'); return; }
+  const cat = getCat(selectedCat);
   expenses.push({
     id: Date.now(),
     amount: Math.round(amount * 100) / 100,
     category: selectedCat,
-    note, date,
-    income: !!(cat && cat.income)
+    subcategory,
+    note,
+    date,
+    income: !!cat.income
   });
   save();
-
   document.getElementById('inp-amount').value = '';
-  document.getElementById('inp-note').value   = '';
+  document.getElementById('inp-note').value = '';
+  document.getElementById('inp-subcategory').innerHTML = '';
+  document.getElementById('subcategory-group').style.display = 'none';
   setDefaultDate();
   document.querySelectorAll('#cat-grid .cat-btn').forEach(b => b.classList.remove('selected'));
   selectedCat = null;
@@ -557,92 +621,95 @@ function addExpense() {
   saveBtn.classList.remove('income-mode');
   saveBtn.textContent = 'Salva spesa';
   document.getElementById('amount-label').textContent = 'Importo (€)';
-  updateHeaderTotal();
-  showToast(cat && cat.income ? '✅ Entrata salvata!' : '✅ Spesa salvata!');
+  buildHistoryFilters(); renderHistory(); renderCharts(); updateHeaderTotal();
+  showToast(cat.income ? '✅ Entrata salvata!' : '✅ Spesa salvata!');
 }
 
-// ─── HISTORY ─────────────────────────────────────────────────────────────────
 function setHistoryPeriod(period, btn) {
   historyPeriod = period;
   document.querySelectorAll('#page-history .period-selector button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  syncHistoryLabel();
-  renderHistory();
-  updateHeaderTotal();
+  syncHistoryLabel(); renderHistory(); updateHeaderTotal();
 }
-
 function changeHistoryPeriod(d) {
-  if (historyPeriod === 'week') {
-    historyWeek = new Date(historyWeek);
-    historyWeek.setDate(historyWeek.getDate() + d * 7);
-  } else {
-    historyMonth = new Date(historyMonth.getFullYear(), historyMonth.getMonth() + d, 1);
-  }
-  syncHistoryLabel();
-  renderHistory();
-  updateHeaderTotal();
+  if (historyPeriod === 'week') { historyWeek = new Date(historyWeek); historyWeek.setDate(historyWeek.getDate() + d * 7); }
+  else { historyMonth = new Date(historyMonth.getFullYear(), historyMonth.getMonth() + d, 1); }
+  syncHistoryLabel(); renderHistory(); updateHeaderTotal();
 }
-
 function syncHistoryLabel() {
   const lbl = document.getElementById('history-month-label');
   if (historyPeriod === 'week') {
     const sun = new Date(historyWeek); sun.setDate(historyWeek.getDate() + 6);
     lbl.textContent = `${historyWeek.toLocaleDateString('it-IT',{day:'numeric',month:'short'})} – ${sun.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}`;
-  } else {
-    lbl.textContent = historyMonth.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
-  }
+  } else lbl.textContent = historyMonth.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
 }
 
+function buildHistoryFilters() {
+  const catSel = document.getElementById('history-cat-filter');
+  const oldCat = catSel.value || '';
+  catSel.innerHTML = `<option value="">Tutte le macro</option>` + visibleCategories().map(c =>
+    `<option value="${c.id}" ${c.id === oldCat ? 'selected' : ''}>${c.icon} ${c.label}</option>`
+  ).join('');
+  buildHistorySubcatFilter();
+}
+function buildHistorySubcatFilter() {
+  const catId = document.getElementById('history-cat-filter').value;
+  const subSel = document.getElementById('history-subcat-filter');
+  const oldSub = subSel.value || '';
+  if (!catId) { subSel.innerHTML = `<option value="">Tutte le sotto</option>`; subSel.disabled = true; return; }
+  const cat = getCat(catId);
+  subSel.disabled = false;
+  subSel.innerHTML = `<option value="">Tutte le sotto</option>` + (cat.subcategories || []).map(s =>
+    `<option value="${s.id}" ${s.id === oldSub ? 'selected' : ''}>${s.label}</option>`
+  ).join('');
+}
+function onHistoryCatFilterChange() { buildHistorySubcatFilter(); renderHistory(); updateHeaderTotal(); }
+
 function getHistoryFiltered() {
+  let filtered;
   if (historyPeriod === 'week') {
     const mon = new Date(historyWeek); mon.setHours(0,0,0,0);
     const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
-    return expenses.filter(e => {
-      const d = new Date(e.date + 'T00:00:00');
-      return d >= mon && d <= sun;
-    });
+    filtered = expenses.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d >= mon && d <= sun; });
+  } else {
+    const ym = fmtYM(historyMonth);
+    filtered = expenses.filter(e => e.date.startsWith(ym));
   }
-  const ym = fmtYM(historyMonth);
-  return expenses.filter(e => e.date.startsWith(ym));
+  const catFilter = document.getElementById('history-cat-filter')?.value || '';
+  const subFilter = document.getElementById('history-subcat-filter')?.value || '';
+  if (catFilter) filtered = filtered.filter(e => e.category === catFilter);
+  if (subFilter) filtered = filtered.filter(e => e.subcategory === subFilter);
+  return filtered;
 }
 
 function renderHistory() {
   const container = document.getElementById('history-list');
   const filtered = getHistoryFiltered().sort((a,b) => b.date.localeCompare(a.date));
-
-  if (!filtered.length) {
-    container.innerHTML = `<div class="empty"><div class="big">📭</div><p>Nessuna voce in questo periodo</p></div>`;
-    return;
-  }
-
+  if (!filtered.length) { container.innerHTML = `<div class="empty"><div class="big">📭</div><p>Nessuna voce in questo periodo</p></div>`; return; }
   const byDate = {};
   filtered.forEach(e => { (byDate[e.date] = byDate[e.date] || []).push(e); });
-
   let html = '';
   Object.keys(byDate).sort((a,b) => b.localeCompare(a)).forEach(date => {
     const d = new Date(date + 'T00:00:00');
     const dayExp = byDate[date].filter(e => !isIncome(e)).reduce((s,e) => s + e.amount, 0);
-    const dayInc = byDate[date].filter(e =>  isIncome(e)).reduce((s,e) => s + e.amount, 0);
+    const dayInc = byDate[date].filter(e => isIncome(e)).reduce((s,e) => s + e.amount, 0);
     let dayLabel = '';
     if (dayExp > 0) dayLabel += `<span style="color:var(--accent2)">-€${dayExp.toFixed(2)}</span>`;
     if (dayInc > 0) dayLabel += `${dayExp > 0 ? '  ' : ''}<span style="color:var(--income)">+€${dayInc.toFixed(2)}</span>`;
-
     html += `<div class="section-title">${d.toLocaleDateString('it-IT',{weekday:'short',day:'numeric',month:'short'})} — ${dayLabel}</div>`;
     html += `<div class="card" style="padding:6px 12px">`;
     byDate[date].forEach(e => {
-      const cat = CATEGORIES.find(c => c.id === e.category) || { icon: '❓', label: e.category, color: '#888' };
-      const inc = isIncome(e);
-      html += `
-        <div class="tx-item">
-          <div class="tx-icon" style="background:${cat.color}22">${cat.icon}</div>
-          <div class="tx-info">
-            <div class="tx-cat">${cat.label}</div>
-            <div class="tx-note">${e.note || '—'}</div>
-          </div>
-          <div class="tx-amount${inc ? ' income' : ''}">${inc ? '+' : ''}€${e.amount.toFixed(2)}</div>
-          <button class="tx-edit" onclick="openEditModal(${e.id})" title="Modifica categoria">✎</button>
-          <button class="tx-del"  onclick="deleteExpense(${e.id})">✕</button>
-        </div>`;
+      const cat = getCat(e.category), sub = getSubcat(e.category, e.subcategory), inc = isIncome(e);
+      html += `<div class="tx-item">
+        <div class="tx-icon" style="background:${cat.color}22">${cat.icon}</div>
+        <div class="tx-info">
+          <div class="tx-cat">${cat.label} · ${sub.label}</div>
+          <div class="tx-note">${e.note || '—'}</div>
+        </div>
+        <div class="tx-amount${inc ? ' income' : ''}">${inc ? '+' : ''}€${e.amount.toFixed(2)}</div>
+        <button class="tx-edit" onclick="openEditModal(${e.id})" title="Modifica">✎</button>
+        <button class="tx-del" onclick="deleteExpense(${e.id})">✕</button>
+      </div>`;
     });
     html += `</div>`;
   });
@@ -652,360 +719,281 @@ function renderHistory() {
 function deleteExpense(id) {
   if (!confirm('Eliminare questa voce?')) return;
   expenses = expenses.filter(e => e.id !== id);
-  save();
-  renderHistory();
-  updateHeaderTotal();
-  showToast('Voce eliminata');
+  save(); renderHistory(); renderCharts(); updateHeaderTotal(); showToast('Voce eliminata');
 }
 
-// ─── EDIT CATEGORY MODAL ─────────────────────────────────────────────────────
 function openEditModal(id) {
-  editExpenseId   = id;
-  editSelectedCat = null;
+  editExpenseId = id;
   const entry = expenses.find(e => e.id === id);
+  if (!entry) return;
+  editSelectedCat = entry.category;
+  document.getElementById('edit-amount').value = entry.amount;
+  document.getElementById('edit-note').value = entry.note || '';
+  document.getElementById('edit-date').value = entry.date;
   document.querySelectorAll('#edit-cat-grid .cat-btn').forEach(b => {
-    b.classList.remove('selected');
-    if (entry && b.dataset.id === entry.category) {
-      b.classList.add('selected');
-      editSelectedCat = entry.category;
-    }
+    b.classList.toggle('selected', b.dataset.id === entry.category);
   });
+  renderSubcategorySelect('edit-subcategory', 'edit-subcategory-group', entry.category, entry.subcategory || '');
   document.getElementById('edit-modal').classList.add('open');
 }
-
 function closeEditModal(event) {
   if (event && event.target !== document.getElementById('edit-modal')) return;
   document.getElementById('edit-modal').classList.remove('open');
-  editExpenseId   = null;
-  editSelectedCat = null;
+  editExpenseId = null; editSelectedCat = null;
 }
-
-function confirmEditCat() {
-  if (!editSelectedCat) { showToast('Seleziona una categoria'); return; }
+function confirmEditEntry() {
   const idx = expenses.findIndex(e => e.id === editExpenseId);
   if (idx === -1) { closeEditModal(); return; }
-  const cat = CATEGORIES.find(c => c.id === editSelectedCat);
-  expenses[idx].category = editSelectedCat;
-  expenses[idx].income   = !!(cat && cat.income);
-  save();
-  document.getElementById('edit-modal').classList.remove('open');
-  editExpenseId   = null;
-  editSelectedCat = null;
-  renderHistory();
-  updateHeaderTotal();
-  if (document.getElementById('page-charts').classList.contains('active')) renderCharts();
-  showToast('Categoria aggiornata');
+  const amount = parseFloat(document.getElementById('edit-amount').value);
+  const note = document.getElementById('edit-note').value.trim();
+  const date = document.getElementById('edit-date').value;
+  const subcategory = document.getElementById('edit-subcategory').value;
+  if (!amount || amount <= 0) { showToast('Importo non valido'); return; }
+  if (!editSelectedCat) { showToast('Seleziona una categoria'); return; }
+  if (!subcategory) { showToast('Seleziona una sottocategoria'); return; }
+  if (!date) { showToast('Seleziona una data'); return; }
+  const cat = getCat(editSelectedCat);
+  expenses[idx] = { ...expenses[idx], amount: Math.round(amount * 100) / 100, category: editSelectedCat, subcategory, note, date, income: !!cat.income };
+  save(); closeEditModal(); buildHistoryFilters(); renderHistory(); renderCharts(); updateHeaderTotal(); showToast('Voce aggiornata');
 }
 
-// ─── CHARTS ──────────────────────────────────────────────────────────────────
 function setChartPeriod(period, btn) {
   chartPeriod = period;
   document.querySelectorAll('#page-charts .period-selector button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('chart-month-nav').style.display = 'flex';
-  syncChartLabel();
-  renderCharts();
-  updateHeaderTotal();
+  syncChartLabel(); renderCharts(); updateHeaderTotal();
 }
-
 function changeChartPeriod(d) {
-  if (chartPeriod === 'week') {
-    chartWeek = new Date(chartWeek);
-    chartWeek.setDate(chartWeek.getDate() + d * 7);
-  } else {
-    chartMonth = new Date(chartMonth.getFullYear(), chartMonth.getMonth() + d, 1);
-  }
-  syncChartLabel();
-  renderCharts();
-  updateHeaderTotal();
+  if (chartPeriod === 'week') { chartWeek = new Date(chartWeek); chartWeek.setDate(chartWeek.getDate() + d * 7); }
+  else { chartMonth = new Date(chartMonth.getFullYear(), chartMonth.getMonth() + d, 1); }
+  syncChartLabel(); renderCharts(); updateHeaderTotal();
 }
-
 function syncChartLabel() {
   const lbl = document.getElementById('chart-month-label');
   if (chartPeriod === 'week') {
     const sun = new Date(chartWeek); sun.setDate(chartWeek.getDate() + 6);
     lbl.textContent = `${chartWeek.toLocaleDateString('it-IT',{day:'numeric',month:'short'})} – ${sun.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}`;
-  } else {
-    lbl.textContent = chartMonth.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
-  }
+  } else lbl.textContent = chartMonth.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
 }
-
 function getChartBounds() {
   if (chartPeriod === 'week') {
     const mon = new Date(chartWeek); mon.setHours(0,0,0,0);
     const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
     return { mon, sun };
   }
-  const mon = new Date(chartMonth.getFullYear(), chartMonth.getMonth(), 1, 0,0,0,0);
-  const sun = new Date(chartMonth.getFullYear(), chartMonth.getMonth()+1, 0, 23,59,59,999);
-  return { mon, sun };
+  return {
+    mon: new Date(chartMonth.getFullYear(), chartMonth.getMonth(), 1, 0,0,0,0),
+    sun: new Date(chartMonth.getFullYear(), chartMonth.getMonth()+1, 0, 23,59,59,999)
+  };
 }
-
 function getFilteredForCharts() {
   const { mon, sun } = getChartBounds();
-  return expenses.filter(e => {
-    const d = new Date(e.date + 'T00:00:00');
-    return d >= mon && d <= sun;
-  });
+  return expenses.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d >= mon && d <= sun; });
 }
+function resetChartDrilldown() { selectedChartCategory = null; renderCharts(); }
 
 function renderCharts() {
   syncChartLabel();
-  document.getElementById('chart-month-nav').style.display = 'flex';
-
-  const filtered      = getFilteredForCharts();
-  const expenseItems  = filtered.filter(e => !isIncome(e));
-  const incomeItems   = filtered.filter(e =>  isIncome(e));
+  const filtered = getFilteredForCharts();
+  const expenseItems = filtered.filter(e => !isIncome(e));
+  const incomeItems = filtered.filter(e => isIncome(e));
   const totalExpenses = expenseItems.reduce((s,e) => s + e.amount, 0);
-  const totalIncome   = incomeItems.reduce((s,e)  => s + e.amount, 0);
-
-  // Saldo cumulativo fino a fine periodo (o oggi, se periodo è futuro)
+  const totalIncome = incomeItems.reduce((s,e) => s + e.amount, 0);
   const { sun: periodSun } = getChartBounds();
   const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
   const cumulativeEnd = periodSun < todayEnd ? periodSun : todayEnd;
   const balance = cumulativeSaldoUpTo(cumulativeEnd);
-
-  let periodLabel;
-  if (chartPeriod === 'week') {
-    const sun = new Date(chartWeek); sun.setDate(chartWeek.getDate() + 6);
-    periodLabel = `${chartWeek.toLocaleDateString('it-IT',{day:'numeric',month:'short'})} – ${sun.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}`;
-  } else {
-    periodLabel = chartMonth.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
-  }
+  const periodLabel = chartPeriod === 'week'
+    ? `${chartWeek.toLocaleDateString('it-IT',{day:'numeric',month:'short'})} – ${new Date(chartWeek.getFullYear(), chartWeek.getMonth(), chartWeek.getDate()+6).toLocaleDateString('it-IT',{day:'numeric',month:'short'})}`
+    : chartMonth.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
   document.getElementById('chart-period-label').textContent = periodLabel;
-
-  const days = chartPeriod === 'week'
-    ? 7
-    : new Date(chartMonth.getFullYear(), chartMonth.getMonth()+1, 0).getDate();
-
-  document.getElementById('stat-total').textContent  = '€' + totalExpenses.toFixed(2);
+  const days = chartPeriod === 'week' ? 7 : new Date(chartMonth.getFullYear(), chartMonth.getMonth()+1, 0).getDate();
+  document.getElementById('stat-total').textContent = '€' + totalExpenses.toFixed(2);
   document.getElementById('stat-income').textContent = '€' + totalIncome.toFixed(2);
   const balEl = document.getElementById('stat-balance');
   balEl.textContent = (balance >= 0 ? '+' : '') + '€' + balance.toFixed(2);
-  balEl.className   = 'value ' + (balance >= 0 ? 'green' : 'red');
-  document.getElementById('stat-avg').textContent    = '€' + (totalExpenses / days).toFixed(2);
+  balEl.className = 'value ' + (balance >= 0 ? 'green' : 'red');
+  document.getElementById('stat-avg').textContent = '€' + (totalExpenses / days).toFixed(2);
+  renderDoughnut(expenseItems, totalExpenses);
+  renderBarChart(expenseItems, incomeItems);
+}
 
-  // ─ DOUGHNUT (spese only) ─
-  const catTotals = {};
-  CATEGORIES.filter(c => !c.income).forEach(c => { catTotals[c.id] = 0; });
-  expenseItems.forEach(e => { if (catTotals[e.category] !== undefined) catTotals[e.category] += e.amount; });
-  const catData = CATEGORIES.filter(c => !c.income)
-    .map(c => ({ cat: c, val: catTotals[c.id] }))
-    .filter(d => d.val > 0);
-
-  if (doughnutChart) doughnutChart.destroy();
+function renderDoughnut(expenseItems, totalExpenses) {
+  const isDrill = !!selectedChartCategory;
+  const title = document.getElementById('doughnut-title');
+  const backBtn = document.getElementById('btn-chart-back');
   const ctxD = document.getElementById('chartDoughnut').getContext('2d');
-  if (!catData.length) {
-    document.getElementById('chart-legend').innerHTML = `<div class="empty" style="padding:16px 0"><p>Nessuna spesa nel periodo</p></div>`;
-    document.getElementById('chartDoughnut').style.display = 'none';
+  if (doughnutChart) doughnutChart.destroy();
+
+  let dataRows = [];
+  if (!isDrill) {
+    title.textContent = 'Spese per macro-categoria';
+    backBtn.style.display = 'none';
+    dataRows = expenseCategories().map(cat => ({
+      id: cat.id, label: cat.label, icon: cat.icon, color: cat.color,
+      val: expenseItems.filter(e => e.category === cat.id).reduce((s,e) => s + e.amount, 0),
+      clickable: true
+    })).filter(d => d.val > 0);
   } else {
-    document.getElementById('chartDoughnut').style.display = 'block';
-    doughnutChart = new Chart(ctxD, {
-      type: 'doughnut',
-      data: {
-        labels: catData.map(d => d.cat.label),
-        datasets: [{
-          data: catData.map(d => d.val),
-          backgroundColor: catData.map(d => d.cat.color + 'cc'),
-          borderColor:     catData.map(d => d.cat.color),
-          borderWidth: 1.5, hoverOffset: 8
-        }]
-      },
-      options: { plugins: { legend: { display: false } }, cutout: '65%', responsive: true }
-    });
-    document.getElementById('chart-legend').innerHTML = catData
-      .sort((a,b) => b.val - a.val)
-      .map(d => `
-        <div class="legend-item">
-          <div class="legend-dot" style="background:${d.cat.color}"></div>
-          <span class="legend-label">${d.cat.icon} ${d.cat.label}</span>
-          <span class="legend-amount" style="color:${d.cat.color}">€${d.val.toFixed(2)}</span>
-          <span style="color:var(--muted);font-size:11px;margin-left:3px">${totalExpenses > 0 ? Math.round(d.val/totalExpenses*100) : 0}%</span>
-        </div>`).join('');
+    const cat = getCat(selectedChartCategory);
+    title.textContent = `Dettaglio ${cat.label}`;
+    backBtn.style.display = 'inline-block';
+    const items = expenseItems.filter(e => e.category === selectedChartCategory);
+    dataRows = (cat.subcategories || []).map((s, i) => ({
+      id: s.id, label: s.label, icon: cat.icon, color: lightenColor(cat.color, i),
+      val: items.filter(e => e.subcategory === s.id).reduce((sum,e) => sum + e.amount, 0),
+      clickable: false
+    })).filter(d => d.val > 0);
+    const missing = items.filter(e => !e.subcategory).reduce((sum,e) => sum + e.amount, 0);
+    if (missing > 0) dataRows.push({ id: '', label: 'Da categorizzare', icon: cat.icon, color: '#888888', val: missing, clickable: false });
   }
 
-  // ─ BAR CHART ─
+  if (!dataRows.length) {
+    document.getElementById('chart-legend').innerHTML = `<div class="empty" style="padding:16px 0"><p>Nessuna spesa nel periodo</p></div>`;
+    document.getElementById('chartDoughnut').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('chartDoughnut').style.display = 'block';
+  doughnutChart = new Chart(ctxD, {
+    type: 'doughnut',
+    data: { labels: dataRows.map(d => d.label), datasets: [{ data: dataRows.map(d => d.val), backgroundColor: dataRows.map(d => d.color + 'cc'), borderColor: dataRows.map(d => d.color), borderWidth: 1.5, hoverOffset: 8 }] },
+    options: {
+      plugins: { legend: { display: false } }, cutout: '65%', responsive: true,
+      onClick: (evt, elements) => {
+        if (!elements.length || isDrill) return;
+        selectedChartCategory = dataRows[elements[0].index].id;
+        renderCharts();
+      }
+    }
+  });
+  const denom = isDrill ? dataRows.reduce((s,d) => s + d.val, 0) : totalExpenses;
+  document.getElementById('chart-legend').innerHTML = dataRows.sort((a,b) => b.val - a.val).map(d =>
+    `<div class="legend-item" ${d.clickable ? `onclick="selectedChartCategory='${d.id}';renderCharts();"` : ''}>
+      <div class="legend-dot" style="background:${d.color}"></div>
+      <span class="legend-label">${d.icon} ${d.label}${d.clickable ? ' ›' : ''}</span>
+      <span class="legend-amount" style="color:${d.color}">€${d.val.toFixed(2)}</span>
+      <span style="color:var(--muted);font-size:11px;margin-left:3px">${denom > 0 ? Math.round(d.val/denom*100) : 0}%</span>
+    </div>`).join('');
+}
+
+function renderBarChart(expenseItems, incomeItems) {
   if (lineChart) lineChart.destroy();
   const ctxL = document.getElementById('chartLine').getContext('2d');
   let labels = [], expDataset = [], incDataset = [];
-
   if (chartPeriod === 'week') {
     ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'].forEach((name, i) => {
-      const d = new Date(chartWeek); d.setDate(chartWeek.getDate() + i);
-      const ds = ymd(d);
+      const d = new Date(chartWeek); d.setDate(chartWeek.getDate() + i); const ds = ymd(d);
       labels.push(name);
       expDataset.push(expenseItems.filter(e => e.date === ds).reduce((s,e) => s+e.amount, 0));
-      incDataset.push(incomeItems.filter(e =>  e.date === ds).reduce((s,e) => s+e.amount, 0));
+      incDataset.push(incomeItems.filter(e => e.date === ds).reduce((s,e) => s+e.amount, 0));
     });
   } else {
-    const daysInMonth = new Date(chartMonth.getFullYear(), chartMonth.getMonth()+1, 0).getDate();
-    const ym = fmtYM(chartMonth);
+    const daysInMonth = new Date(chartMonth.getFullYear(), chartMonth.getMonth()+1, 0).getDate(); const ym = fmtYM(chartMonth);
     for (let d = 1; d <= daysInMonth; d++) {
       const ds = `${ym}-${String(d).padStart(2,'0')}`;
       labels.push(d);
       expDataset.push(expenseItems.filter(e => e.date === ds).reduce((s,e) => s+e.amount, 0));
-      incDataset.push(incomeItems.filter(e =>  e.date === ds).reduce((s,e) => s+e.amount, 0));
+      incDataset.push(incomeItems.filter(e => e.date === ds).reduce((s,e) => s+e.amount, 0));
     }
   }
-
   const hasIncome = incDataset.some(v => v > 0);
   lineChart = new Chart(ctxL, {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Spese (€)', data: expDataset, backgroundColor: '#7c6ef755', borderColor: '#7c6ef7', borderWidth: 1.5, borderRadius: 6 },
-        ...(hasIncome ? [{ label: 'Entrate (€)', data: incDataset, backgroundColor: '#6ef7a055', borderColor: '#6ef7a0', borderWidth: 1.5, borderRadius: 6 }] : [])
-      ]
-    },
+    data: { labels, datasets: [
+      { label: 'Spese (€)', data: expDataset, backgroundColor: '#7c6ef755', borderColor: '#7c6ef7', borderWidth: 1.5, borderRadius: 6 },
+      ...(hasIncome ? [{ label: 'Entrate (€)', data: incDataset, backgroundColor: '#6ef7a055', borderColor: '#6ef7a0', borderWidth: 1.5, borderRadius: 6 }] : [])
+    ]},
     options: {
       plugins: { legend: { display: hasIncome, labels: { color: '#f0f0f5', font: { size: 11 }, boxWidth: 12 } } },
-      scales: {
-        x: { ticks: { color: '#8888a0', font: { size: 10 } }, grid: { color: '#ffffff08' } },
-        y: { ticks: { color: '#8888a0', callback: v => '€'+v, font: { size: 10 } }, grid: { color: '#ffffff08' } }
-      },
-      responsive: true,
+      scales: { x: { ticks: { color: '#8888a0', font: { size: 10 } }, grid: { color: '#ffffff08' } }, y: { ticks: { color: '#8888a0', callback: v => '€'+v, font: { size: 10 } }, grid: { color: '#ffffff08' } } },
+      responsive: true
     }
   });
 }
 
-// ─── HEADER ──────────────────────────────────────────────────────────────────
-// L'header mostra i totali del periodo che stai effettivamente guardando:
-//  - Aggiungi / Impostazioni → mese corrente
-//  - Storico (mese)        → mese visualizzato
-//  - Storico (settimana)   → settimana visualizzata
-//  - Grafici (mese)        → mese visualizzato
-//  - Grafici (settimana)   → settimana visualizzata
 function getHeaderScope() {
   if (currentPage === 'history') {
-    if (historyPeriod === 'week') {
-      const mon = new Date(historyWeek); mon.setHours(0,0,0,0);
-      const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
-      return { type: 'week', mon, sun, label: weekLabel(mon, sun) };
-    }
+    if (historyPeriod === 'week') { const mon = new Date(historyWeek); mon.setHours(0,0,0,0); const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999); return { type: 'week', mon, sun, label: weekLabel(mon, sun) }; }
     return { type: 'month', date: historyMonth, label: monthLabel(historyMonth) };
   }
   if (currentPage === 'charts') {
-    if (chartPeriod === 'week') {
-      const mon = new Date(chartWeek); mon.setHours(0,0,0,0);
-      const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
-      return { type: 'week', mon, sun, label: weekLabel(mon, sun) };
-    }
+    if (chartPeriod === 'week') { const mon = new Date(chartWeek); mon.setHours(0,0,0,0); const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999); return { type: 'week', mon, sun, label: weekLabel(mon, sun) }; }
     return { type: 'month', date: chartMonth, label: monthLabel(chartMonth) };
   }
-  // add / settings → mese corrente
   return { type: 'month', date: new Date(), label: monthLabel(new Date()) + ' (corrente)' };
 }
-
-// Saldo cumulativo: somma di tutto (entrate − spese) fino a una certa data
 function cumulativeSaldoUpTo(endDate) {
   let total = 0;
-  expenses.forEach(e => {
-    const d = new Date(e.date + 'T00:00:00');
-    if (d <= endDate) total += isIncome(e) ? e.amount : -e.amount;
-  });
+  expenses.forEach(e => { const d = new Date(e.date + 'T00:00:00'); if (d <= endDate) total += isIncome(e) ? e.amount : -e.amount; });
   return total;
 }
-
 function updateHeaderTotal() {
-  const scope = getHeaderScope();
-
-  // Spese del periodo selezionato (utile "quanto ho speso questo mese")
-  let exp = 0;
-  if (scope.type === 'week') {
-    expenses.forEach(e => {
-      const d = new Date(e.date + 'T00:00:00');
-      if (d >= scope.mon && d <= scope.sun && !isIncome(e)) exp += e.amount;
-    });
-  } else {
-    const ym = fmtYM(scope.date);
-    expenses.forEach(e => {
-      if (e.date.startsWith(ym) && !isIncome(e)) exp += e.amount;
-    });
-  }
-
-  // Saldo cumulativo fino a fine periodo (o fino a oggi se il periodo è futuro)
+  const scope = getHeaderScope(); let exp = 0;
+  if (scope.type === 'week') expenses.forEach(e => { const d = new Date(e.date + 'T00:00:00'); if (d >= scope.mon && d <= scope.sun && !isIncome(e)) exp += e.amount; });
+  else { const ym = fmtYM(scope.date); expenses.forEach(e => { if (e.date.startsWith(ym) && !isIncome(e)) exp += e.amount; }); }
   const today = new Date(); today.setHours(23,59,59,999);
-  const periodEnd = scope.type === 'week'
-    ? scope.sun
-    : new Date(scope.date.getFullYear(), scope.date.getMonth()+1, 0, 23,59,59,999);
+  const periodEnd = scope.type === 'week' ? scope.sun : new Date(scope.date.getFullYear(), scope.date.getMonth()+1, 0, 23,59,59,999);
   const endDate = periodEnd < today ? periodEnd : today;
   const saldo = cumulativeSaldoUpTo(endDate);
-
-  document.getElementById('header-total').innerHTML =
-    `<span class="period-tag">${scope.label}</span> · Spese €${exp.toFixed(2)} · Saldo ${saldo >= 0 ? '+' : ''}€${saldo.toFixed(2)}`;
+  document.getElementById('header-total').innerHTML = `<span class="period-tag">${scope.label}</span> · Spese €${exp.toFixed(2)} · Saldo ${saldo >= 0 ? '+' : ''}€${saldo.toFixed(2)}`;
 }
 
-function monthLabel(d) {
-  return d.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
-}
-function weekLabel(mon, sun) {
-  return `${mon.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}–${sun.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}`;
-}
-
-// ─── SETTINGS ────────────────────────────────────────────────────────────────
 function exportCSV() {
-  const rows = ['Data,Categoria,Nota,Importo,Tipo'];
-  expenses.sort((a,b) => a.date.localeCompare(b.date)).forEach(e => {
-    const cat = CATEGORIES.find(c => c.id === e.category)?.label || e.category;
-    rows.push(`${e.date},"${cat}","${e.note||''}",${e.amount},${isIncome(e)?'entrata':'spesa'}`);
+  const rows = ['Data,Macro categoria,Sottocategoria,Nota,Importo,Tipo'];
+  [...expenses].sort((a,b) => a.date.localeCompare(b.date)).forEach(e => {
+    const cat = getCat(e.category).label;
+    const sub = getSubcat(e.category, e.subcategory).label;
+    rows.push(`${e.date},"${escapeCsv(cat)}","${escapeCsv(sub)}","${escapeCsv(e.note||'')}",${e.amount},${isIncome(e)?'entrata':'spesa'}`);
   });
   downloadFile('spese.csv', rows.join('\n'), 'text/csv');
 }
-
-function exportJSON() {
-  downloadFile('spese-backup.json', JSON.stringify(expenses, null, 2), 'application/json');
-}
-
+function exportJSON() { downloadFile('spese-backup.json', JSON.stringify(expenses, null, 2), 'application/json'); }
 function importData() { document.getElementById('file-import').click(); }
-
 function handleImport(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const data = JSON.parse(e.target.result);
+      const data = migrateExpenses(JSON.parse(e.target.result));
       if (!Array.isArray(data)) { showToast('File non valido'); return; }
       const existing = new Set(expenses.map(x => x.id));
       const newItems = data.filter(x => !existing.has(x.id));
-      expenses = [...expenses, ...newItems];
-      save(); updateHeaderTotal();
+      expenses = migrateExpenses([...expenses, ...newItems]);
+      save(); buildHistoryFilters(); renderHistory(); renderCharts(); updateHeaderTotal();
       showToast(`✅ Importate ${newItems.length} voci`);
     } catch { showToast('Errore nel file JSON'); }
   };
-  reader.readAsText(file);
-  event.target.value = '';
+  reader.readAsText(file); event.target.value = '';
 }
-
+function assignAltroToMissingSubcategories() {
+  let count = 0;
+  expenses = expenses.map(e => {
+    if (!e.subcategory) { count++; return { ...e, subcategory: 'altro' }; }
+    return e;
+  });
+  save(); renderHistory(); renderCharts(); updateHeaderTotal(); showToast(`Aggiornate ${count} voci`);
+}
 function clearAll() {
   if (!confirm('Eliminare TUTTI i dati?\nOperazione irreversibile.')) return;
-  expenses = []; save(); updateHeaderTotal(); renderHistory(); renderCharts();
-  showToast('Dati eliminati');
+  expenses = []; save(); updateHeaderTotal(); renderHistory(); renderCharts(); showToast('Dati eliminati');
 }
 
-// ─── UTILS ───────────────────────────────────────────────────────────────────
 function fmtYM(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
-function ymd(d)   { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-
-// Lunedì della settimana che contiene la data passata (00:00 locale)
-function mondayOf(date) {
-  const d = new Date(date);
-  d.setHours(0,0,0,0);
-  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
-  return d;
-}
-
-function downloadFile(name, content, mime) {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([content], { type: mime }));
-  a.download = name; a.click();
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+function ymd(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function mondayOf(date) { const d = new Date(date); d.setHours(0,0,0,0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d; }
+function monthLabel(d) { return d.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' }); }
+function weekLabel(mon, sun) { return `${mon.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}–${sun.toLocaleDateString('it-IT',{day:'numeric',month:'short'})}`; }
+function downloadFile(name, content, mime) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([content], { type: mime })); a.download = name; a.click(); }
+function escapeCsv(s) { return String(s).replace(/"/g, '""'); }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+function lightenColor(hex, idx) {
+  const base = hex.replace('#','');
+  const num = parseInt(base, 16);
+  let r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
+  const mix = Math.min(0.55, idx * 0.09);
+  r = Math.round(r + (255-r)*mix); g = Math.round(g + (255-g)*mix); b = Math.round(b + (255-b)*mix);
+  return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
 }
 </script>
 </body>
